@@ -79,6 +79,43 @@ aichat --agent terminator "what shell am I using?"             # Detects your cu
 aichat --agent terminator "show running processes"             # Uses ps on Unix, Get-Process on Windows
 ```
 
+### REPL Model
+
+```bash
+proxy at MacBook-Pro.local in [~]   
+12:32:35 › aichat
+Welcome to aichat 0.29.0
+Type ".help" for additional help.
+> .agent terminator
+
+terminator>> .session
+
+terminator>temp) create a test file                                                                                                                                                     0
+请问您希望在当前目录下创建一个名为 "test" 的文件吗？或者您想指定文件的扩展名或路径？另外，您是否希望文件内容为空，还是包含一些示例文字？请告诉我您的具体需求，我将帮您生成并执行相应的命令。
+
+terminator>temp) any                                                                                                                                                              519(0%)
+好的，我将为您在当前目录下创建一个名为 test 的空文件。执行的命令是：
+
+```sh
+touch test
+```
+
+我现在执行该命令。
+Call terminator execute_command {"command":"touch test"}
+Execute command: touch test [Y/n] y
+
+terminator>temp) delete test file                                                                                                                                                 573(0%)
+删除文件是一个不可逆的操作。您确定要删除当前目录下名为 test 的文件吗？如果确定，请确认，我将为您执行删除操作。
+
+terminator>temp) yes                                                                                                                                                              636(0%)
+Call terminator execute_command {"command":"rm ./test"}
+Execute command: rm ./test [Y/n] y
+
+terminator>temp)                 
+```
+
+
+
 ## 🏗️ Project Structure
 
 ```plaintext
