@@ -1,89 +1,53 @@
-# 🤖 aichat Terminator Agent
+# aichat Terminator Agent
 
-> A secure, intelligent command-line agent that translates natural language into shell commands with built-in safety mechanisms.
+An AI agent that translates natural language into shell commands with built-in safety mechanisms. Every command requires user confirmation before execution.
 
-This project implements a "Warp-like" terminal AI agent using the [aichat](https://github.com/sigoden/aichat) ecosystem. It safely executes shell commands through natural language input while following a strict "Human-in-the-Loop" approach for security.
+## Features
 
-## ✨ Features
+- Natural language to shell command translation
+- Human-in-the-loop safety: all commands require approval
+- Cross-platform support (macOS, Linux, Windows)
+- Session mode for extended workflows
 
-- **🔒 Secure Command Execution**: Every command requires user confirmation before execution
-- **🛡️ Safety-First Design**: Built-in rules prevent destructive operations
-- **🧠 Natural Language Processing**: Convert plain English to precise shell commands
-- **🖥️ System-Aware**: Automatically detects your OS, shell, and environment for optimal command generation
-- **⚡ Easy Setup**: One-command installation and setup
-- **🔧 Modular Architecture**: Easily extendable with new tools and capabilities
-
-## 🚀 Quick Start
+## Installation
 
 ### Prerequisites
 
-You'll need the following tools installed:
+Required tools:
+- [aichat](https://github.com/sigoden/aichat) - The core LLM CLI tool
+- [argc](https://github.com/sigoden/argc) - Command parser
+- [jq](https://jqlang.github.io/jq/) - JSON processor
 
-**macOS (using Homebrew):**
+**Installation options:**
+- **macOS/Linux**: Use [Homebrew](https://brew.sh/) to install all dependencies
+- **Ubuntu/Debian**: Use `apt` for jq, install argc and aichat manually
+- **Other platforms**: Follow individual project installation guides
+
+### Setup
+
 ```bash
-brew install argc jq
-# Install aichat (follow instructions at https://github.com/sigoden/aichat)
+git clone https://github.com/your-username/aichat-terminator-agent.git
+cd aichat-terminator-agent
+./setup.sh
 ```
 
-**Ubuntu/Debian:**
+Verify installation:
 ```bash
-sudo apt update
-sudo apt install curl jq
-# Install argc manually from: https://github.com/sigoden/argc
-# Install aichat manually from: https://github.com/sigoden/aichat
+aichat --list-agents  # Should show 'terminator'
 ```
 
-**Other platforms:**
-- argc: https://github.com/sigoden/argc
-- aichat: https://github.com/sigoden/aichat
-- jq: https://jqlang.github.io/jq/
+## Usage
 
-### Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/aichat-terminator-agent.git
-   cd aichat-terminator-agent
-   ```
-
-2. **Run the setup script**:
-   ```bash
-   ./setup.sh
-   ```
-
-   This will:
-   - Check all dependencies
-   - Build the agent and tools
-   - Link the agent to your aichat installation
-
-### Usage Examples
-
+Basic usage:
 ```bash
-# Basic file operations
-aichat --agent terminator "show me the current directory path"
-aichat --agent terminator "list all files including hidden ones"
-aichat --agent terminator "find all Python files in this directory"
-
-# System information
-aichat --agent terminator "show me disk usage"
-aichat --agent terminator "check system memory usage"
-aichat --agent terminator "display current date and time"
-
-# Git operations
+aichat --agent terminator "list all files"
 aichat --agent terminator "show git status"
-aichat --agent terminator "list recent git commits"
-
-# System-aware operations (automatically adjusts for your OS/shell)
-aichat --agent terminator "show detailed system information"  # Uses system_profiler on macOS, systeminfo on Windows
-aichat --agent terminator "what shell am I using?"             # Detects your current shell
-aichat --agent terminator "show running processes"             # Uses ps on Unix, Get-Process on Windows
+aichat --agent terminator "check disk usage"
 ```
 
-### REPL Model
-> aichat -a terminator -s
-
+Interactive session:
+> aichat --agent terminator --session
 ```bash
-proxxy at tubuntu in [~/program/aichat-terminator-agent]  on git:main ✔︎  77a4530 "fix ubuntu path"
 13:30:57 › aichat -a terminator -s
 terminator>temp) create a test.txt file                                                                                                                                                 0
 I will create a file named "test.txt" in the current directory. This file will be empty initially. The command I'll use is `touch test.txt`, which safely creates an empty file if it does not exist, or updates the timestamp if it does.
@@ -103,101 +67,30 @@ Execute command: rm test.txt [Y/n] y
 
 terminator>temp) 
 > Save session? No
-
-proxxy at tubuntu in [~/program/aichat-terminator-agent]  on git:main ✔︎  77a4530 "fix ubuntu path"
-13:31:35 ›            
 ```
 
+## ⚠️ Security Warning
 
+**IMPORTANT: This tool executes shell commands based on AI interpretation.**
 
-## 🏗️ Project Structure
+- **Always review commands before confirming** - The AI may misunderstand your request
+- **Never run as root/administrator** - Use regular user privileges only  
+- **Test in safe environments first** - Don't use on production systems initially
+- **Commands execute with your permissions** - They can modify/delete files you have access to
 
-```plaintext
-aichat-terminator-agent/
-├── terminator/
-│   ├── index.yaml          # Agent configuration and instructions
-│   └── tools.sh            # Command execution tools
-├── utils/
-│   └── guard_operation.sh  # Safety confirmation utility
-├── Argcfile.sh             # Build system and commands
-├── setup.sh                # One-click setup script
-├── README.md               # This file
-└── LICENSE                 # MIT License
-```
+**Type 'n' to cancel any command you're unsure about.**
 
-## 🔒 Security Features
+## Troubleshooting
 
-This agent implements multiple layers of security:
-
-1. **Human-in-the-Loop Confirmation**: Every command execution requires explicit user approval
-2. **Defensive Prompt Engineering**: Built-in instructions prevent the AI from generating destructive commands
-3. **Command Validation**: Safe commands are prioritized, dangerous operations are avoided
-4. **Transparent Operation**: All commands are displayed to the user before execution
-
-### Example Security Flow
-
+Manual setup:
 ```bash
-$ aichat --agent terminator "remove a test file"
-
-Call terminator execute_command {"command":"rm test.txt"}
-Execute command: rm test.txt [Y/n] n
-error: aborted!
-Error: Tool call exit with 1
+./Argcfile.sh check     # Verify dependencies
+./Argcfile.sh reinstall # Clean reinstall
 ```
 
-## 🛠️ Manual Setup (Alternative)
+## Disclaimer
 
-If you prefer to set up manually:
-
-```bash
-# Check dependencies
-./Argcfile.sh check
-
-# Build the agent
-./Argcfile.sh build
-
-# Link to aichat
-./Argcfile.sh link-to-aichat
-```
-
-## 🧪 Testing
-
-Test the agent with safe commands:
-
-```bash
-# Test basic functionality
-aichat --agent terminator "what directory am I in?"
-
-# Test with confirmation (type 'y' when prompted)
-aichat --agent terminator "show me the date"
-
-# Test cancellation (type 'n' when prompted)
-aichat --agent terminator "list files"
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to:
-
-1. Fork the repository
-2. Create a feature branch
-3. Add your improvements
-4. Submit a pull request
-
-## 📚 Related Projects
-
-- [aichat](https://github.com/sigoden/aichat) - The core LLM CLI tool
-- [llm-functions](https://github.com/sigoden/llm-functions) - Framework for creating LLM tools and agents
-- [argc](https://github.com/sigoden/argc) - Command-line argument parser
-
-## ⚠️ Disclaimer
-
-This tool executes shell commands based on AI interpretation. While safety measures are in place, always:
-
-- Review commands before approving them
-- Be cautious with file operations
-- Test in a safe environment first
-- Understand that the AI may misinterpret requests
+This tool executes shell commands based on AI interpretation. Always review commands before execution. The authors are not responsible for any damages or data loss. Use at your own risk.
 
 ## 📄 License
 
