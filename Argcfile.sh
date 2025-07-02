@@ -69,7 +69,7 @@ build_agent() {
         mkdir -p bin
         cp "$script_file" bin/terminator
         # Fix the ROOT_DIR path calculation for bin/terminator (needs to go up two levels instead of one)
-        sed -i 's|\$SCRIPT_DIR/\.\.|\$SCRIPT_DIR/../..|g' bin/terminator
+        sed -i '' 's|\$SCRIPT_DIR/\.\.|\$SCRIPT_DIR/../..|g' bin/terminator
         chmod +x bin/terminator
         echo "✅ Generated terminator/bin/terminator"
     else
@@ -81,7 +81,7 @@ build_agent() {
 
 # @cmd Link this agent to aichat (force replace if exists)
 link-to-aichat() {
-    local aichat_functions_dir
+    local aichat_config_dir aichat_functions_dir
     # Check if aichat is available, try Linuxbrew if not in PATH
     if command -v aichat >/dev/null 2>&1; then
         AICHAT_CMD="aichat"
@@ -92,24 +92,35 @@ link-to-aichat() {
         exit 1
     fi
     
+    # Get both directories
+    local config_file="$($AICHAT_CMD --info | awk '/^config_file/ {$1=""; print $0}' | sed 's/^ *//')"
+    aichat_config_dir="$(dirname "$config_file")"
     aichat_functions_dir="$($AICHAT_CMD --info | awk '/^functions_dir/ {$1=""; print $0}' | sed 's/^ *//')"
     
-    if [[ -n "$aichat_functions_dir" ]]; then
-        # Create agents directory in aichat functions dir
+    if [[ -n "$aichat_config_dir" && -n "$aichat_functions_dir" ]]; then
+        # Create agents directories in both locations
+        mkdir -p "$aichat_config_dir/agents"
         mkdir -p "$aichat_functions_dir/agents"
         
-        # Force remove any existing terminator installation
-        local agent_link="$aichat_functions_dir/agents/terminator"
-        if [[ -L "$agent_link" ]] || [[ -d "$agent_link" ]] || [[ -f "$agent_link" ]]; then
-            echo "Removing existing terminator installation at $agent_link"
-            rm -rf "$agent_link"
-        fi
+        # Force remove any existing terminator installations
+        local config_link="$aichat_config_dir/agents/terminator"
+        local functions_link="$aichat_functions_dir/agents/terminator"
         
-        # Create fresh symlink
-        ln -s "$(pwd)/terminator" "$agent_link"
-        echo "✅ Linked terminator agent to $agent_link (force replaced)"
+        for link in "$config_link" "$functions_link"; do
+            if [[ -L "$link" ]] || [[ -d "$link" ]] || [[ -f "$link" ]]; then
+                echo "Removing existing terminator installation at $link"
+                rm -rf "$link"
+            fi
+        done
+        
+        # Create fresh symlinks in both locations
+        ln -s "$(pwd)/terminator" "$config_link"
+        ln -s "$(pwd)/terminator" "$functions_link"
+        echo "✅ Linked terminator agent to:"
+        echo "   📁 Config: $config_link (for agent data & config)"
+        echo "   🔧 Functions: $functions_link (for agent loading)"
     else
-        echo "Error: Could not determine aichat functions directory"
+        echo "Error: Could not determine aichat directories"
         exit 1
     fi
 }
