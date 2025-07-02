@@ -5,7 +5,12 @@ set -e
 
 # Get the real path of this script, resolving symlinks
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
-ROOT_DIR="${LLM_ROOT_DIR:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+# Calculate ROOT_DIR: if we're in bin/ subdirectory, go up 2 levels; otherwise go up 1 level
+if [[ "$(basename "$SCRIPT_DIR")" == "bin" ]]; then
+    ROOT_DIR="${LLM_ROOT_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+else
+    ROOT_DIR="${LLM_ROOT_DIR:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+fi
 
 # @cmd Execute the shell command with user confirmation
 # @option --command! The command to execute

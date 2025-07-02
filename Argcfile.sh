@@ -68,8 +68,6 @@ build_agent() {
         # Create bin directory and binary
         mkdir -p bin
         cp "$script_file" bin/terminator
-        # Fix the ROOT_DIR path calculation for bin/terminator (needs to go up two levels instead of one)
-        sed -i '' 's|\$SCRIPT_DIR/\.\.|\$SCRIPT_DIR/../..|g' bin/terminator
         chmod +x bin/terminator
         echo "✅ Generated terminator/bin/terminator"
     else
