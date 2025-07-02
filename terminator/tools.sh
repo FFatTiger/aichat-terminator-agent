@@ -25,8 +25,50 @@ execute_command() {
         : # argc_command should already be set
     fi
     
+    # Validate that argc_command is not empty
+    if [[ -z "$argc_command" ]]; then
+        echo "Error: No command provided" >> "$LLM_OUTPUT"
+        return 1
+    fi
+    
     "$ROOT_DIR/utils/guard_operation.sh" "Execute command: $argc_command"
-    eval "$argc_command" >> "$LLM_OUTPUT"
+    
+    # Create temporary files for output and error capture
+    local temp_out=$(mktemp)
+    local temp_err=$(mktemp)
+    
+    # Execute command and capture output/errors (temporarily disable set -e)
+    set +e
+    eval "$argc_command" >"$temp_out" 2>"$temp_err"
+    local exit_code=$?
+    set -e
+    
+    # Output results to LLM
+    if [[ $exit_code -eq 0 ]]; then
+        # Success: show output
+        cat "$temp_out" >> "$LLM_OUTPUT"
+        if [[ -s "$temp_err" ]]; then
+            echo "" >> "$LLM_OUTPUT"
+            echo "Command executed successfully, but had warnings:" >> "$LLM_OUTPUT"
+            cat "$temp_err" >> "$LLM_OUTPUT"
+        fi
+    else
+        # Error: show error information for AI to potentially fix
+        echo "Command failed with exit code $exit_code:" >> "$LLM_OUTPUT"
+        echo "" >> "$LLM_OUTPUT"
+        echo "Error output:" >> "$LLM_OUTPUT"
+        cat "$temp_err" >> "$LLM_OUTPUT"
+        if [[ -s "$temp_out" ]]; then
+            echo "" >> "$LLM_OUTPUT"
+            echo "Standard output:" >> "$LLM_OUTPUT"
+            cat "$temp_out" >> "$LLM_OUTPUT"
+        fi
+        echo "" >> "$LLM_OUTPUT"
+        echo "Please review the error and suggest a corrected command if needed." >> "$LLM_OUTPUT"
+    fi
+    
+    # Clean up temp files
+    rm -f "$temp_out" "$temp_err"
 }
 
 # See more details at https://github.com/sigoden/argc
