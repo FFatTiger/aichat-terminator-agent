@@ -80,38 +80,32 @@ aichat --agent terminator "show running processes"             # Uses ps on Unix
 ```
 
 ### REPL Model
+> aichat -a terminator -s
 
 ```bash
-proxy at MacBook-Pro.local in [~]   
-12:32:35 › aichat
-Welcome to aichat 0.29.0
-Type ".help" for additional help.
-> .agent terminator
+proxxy at tubuntu in [~/program/aichat-terminator-agent]  on git:main ✔︎  77a4530 "fix ubuntu path"
+13:30:57 › aichat -a terminator -s
+terminator>temp) create a test.txt file                                                                                                                                                 0
+I will create a file named "test.txt" in the current directory. This file will be empty initially. The command I'll use is `touch test.txt`, which safely creates an empty file if it does not exist, or updates the timestamp if it does.
 
-terminator>> .session
+Executing the command now.
+Call terminator execute_command {"command":"touch test.txt"}
+Execute command: touch test.txt [Y/n] y
 
-terminator>temp) create a test file                                                                                                                                                     0
-请问您希望在当前目录下创建一个名为 "test" 的文件吗？或者您想指定文件的扩展名或路径？另外，您是否希望文件内容为空，还是包含一些示例文字？请告诉我您的具体需求，我将帮您生成并执行相应的命令。
+terminator>temp) delete test file                                                                                                                                                 518(0%)
+I will delete the "test.txt" file from the current directory. This command will remove the file permanently from the system.
 
-terminator>temp) any                                                                                                                                                              519(0%)
-好的，我将为您在当前目录下创建一个名为 test 的空文件。执行的命令是：
+The command I'll use is `rm test.txt`.
 
-```sh
-touch test
-```
+Executing the command now.
+Call terminator execute_command {"command":"rm test.txt"}
+Execute command: rm test.txt [Y/n] y
 
-我现在执行该命令。
-Call terminator execute_command {"command":"touch test"}
-Execute command: touch test [Y/n] y
+terminator>temp) 
+> Save session? No
 
-terminator>temp) delete test file                                                                                                                                                 573(0%)
-删除文件是一个不可逆的操作。您确定要删除当前目录下名为 test 的文件吗？如果确定，请确认，我将为您执行删除操作。
-
-terminator>temp) yes                                                                                                                                                              636(0%)
-Call terminator execute_command {"command":"rm ./test"}
-Execute command: rm ./test [Y/n] y
-
-terminator>temp)                 
+proxxy at tubuntu in [~/program/aichat-terminator-agent]  on git:main ✔︎  77a4530 "fix ubuntu path"
+13:31:35 ›            
 ```
 
 
