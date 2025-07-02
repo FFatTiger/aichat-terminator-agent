@@ -19,11 +19,24 @@ This project implements a "Warp-like" terminal AI agent using the [aichat](https
 
 You'll need the following tools installed:
 
+**macOS (using Homebrew):**
 ```bash
-# Install aichat (follow instructions at https://github.com/sigoden/aichat)
-# Install argc and jq
 brew install argc jq
+# Install aichat (follow instructions at https://github.com/sigoden/aichat)
 ```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt update
+sudo apt install curl jq
+# Install argc manually from: https://github.com/sigoden/argc
+# Install aichat manually from: https://github.com/sigoden/aichat
+```
+
+**Other platforms:**
+- argc: https://github.com/sigoden/argc
+- aichat: https://github.com/sigoden/aichat
+- jq: https://jqlang.github.io/jq/
 
 ### Installation
 

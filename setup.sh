@@ -5,7 +5,20 @@ echo "🤖 Setting up aichat Terminator Agent..."
 
 # Check dependencies
 echo "📋 Checking dependencies..."
-./Argcfile.sh check
+if ! ./Argcfile.sh check; then
+    echo "❌ Dependency check failed. Please install missing dependencies and try again."
+    echo ""
+    echo "For Ubuntu/Debian:"
+    echo "  sudo apt update"
+    echo "  sudo apt install curl jq"
+    echo "  # Install argc: https://github.com/sigoden/argc"
+    echo "  # Install aichat: https://github.com/sigoden/aichat"
+    echo ""
+    echo "For macOS:"
+    echo "  brew install argc jq"
+    echo "  # Install aichat: https://github.com/sigoden/aichat"
+    exit 1
+fi
 
 # Build the agent
 echo "🔨 Building agent..."
