@@ -47,6 +47,11 @@ instructions: |
 
   Your role is to run safe, informational, and productivity-enhancing commands while providing clear explanations of what you're doing and why.
 
+variables:
+  - name: auto_approve
+    description: Set to true to skip confirmation prompts (⚠️ use with caution)
+    default: false
+
 tools:
   - execute_command
 

@@ -1,6 +1,6 @@
 # aichat Terminator Agent
 
-An AI agent that translates natural language into shell commands with built-in safety mechanisms. Every command requires user confirmation before execution.
+An AI agent that translates natural language into shell commands with built-in safety mechanisms. Every command requires user confirmation before execution unless auto-approve mode is enabled (NOT RECOMMENDED due to extreme security risks).
 
 ## Features
 
@@ -44,6 +44,7 @@ aichat --agent terminator "list all files"
 aichat --agent terminator "show git status"
 aichat --agent terminator "check disk usage"
 ```
+
 ### Interactive session:
 
 Enter REPL mode:
@@ -70,6 +71,34 @@ Call terminator execute_command {"command":"rm test.txt"}
 Execute command: rm test.txt [Y/n] y
 ```
 
+### ⚠️ Auto-approve mode (EXTREMELY DANGEROUS):
+To skip confirmation prompts, edit `terminator/config.yaml`:
+```yaml
+variables: 
+  auto_approve: true    # 🚨 DANGER: Completely bypasses ALL safety checks
+```
+
+After editing, rebuild the agent:
+```bash
+./setup.sh
+```
+
+🚨 **CRITICAL WARNING**: Auto-approve mode is EXTREMELY DANGEROUS and can cause IRREVERSIBLE DAMAGE to your system:
+
+- **PERMANENT DATA LOSS**: Commands can delete files, databases, or entire directories without warning
+- **SYSTEM CORRUPTION**: May modify critical system files or configurations
+- **SECURITY BREACHES**: Could execute malicious commands if AI is compromised or misunderstands instructions
+- **NETWORK DAMAGE**: May perform destructive network operations or expose sensitive data
+- **FINANCIAL LIABILITY**: Automated commands could trigger costly cloud operations or services
+
+**NEVER USE AUTO-APPROVE ON:**
+- Production systems
+- Systems with important data
+- Shared or corporate environments
+- Systems you don't fully control
+
+**DISCLAIMER**: By enabling auto-approve mode, you acknowledge that you understand the extreme risks and accept FULL RESPONSIBILITY for any damage, data loss, security breaches, or other consequences. The authors and contributors of this software are NOT LIABLE for any damages whatsoever, including but not limited to data loss, system corruption, financial losses, or security incidents resulting from the use of auto-approve mode.
+
 ## ⚠️ Security Warning
 
 **IMPORTANT: This tool executes shell commands based on AI interpretation.**
@@ -78,8 +107,9 @@ Execute command: rm test.txt [Y/n] y
 - **Never run as root/administrator** - Use regular user privileges only  
 - **Test in safe environments first** - Don't use on production systems initially
 - **Commands execute with your permissions** - They can modify/delete files you have access to
+- **Auto-approve mode is EXTREMELY DANGEROUS** - Setting `auto_approve: true` bypasses ALL safety checks and can cause IRREVERSIBLE DAMAGE
 
-**Type 'n' to cancel any command you're unsure about.**
+**Type 'n' to cancel any command you're unsure about. NEVER enable auto-approve unless you fully understand the extreme risks and accept complete liability for any consequences.**
 
 ## Troubleshooting
 

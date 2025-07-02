@@ -2,6 +2,7 @@
 set -e
 
 # @env LLM_OUTPUT=/dev/stdout The output path
+# @env LLM_AGENT_VAR_AUTO_APPROVE=false Set to true to skip confirmation prompts
 
 # Get the real path of this script, resolving symlinks
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
@@ -31,7 +32,13 @@ execute_command() {
         return 1
     fi
     
-    "$ROOT_DIR/utils/guard_operation.sh" "Execute command: $argc_command"
+    # Check if auto_approve is enabled (agent variable format: LLM_AGENT_VAR_AUTO_APPROVE)
+    if [[ "${LLM_AGENT_VAR_AUTO_APPROVE:-false}" == "true" ]]; then
+        echo "Auto-approve enabled, executing command: $argc_command" >> "$LLM_OUTPUT"
+    else
+        # Use guard operation for confirmation
+        "$ROOT_DIR/utils/guard_operation.sh" "Execute command: $argc_command"
+    fi
     
     # Create temporary files for output and error capture
     local temp_out=$(mktemp)
