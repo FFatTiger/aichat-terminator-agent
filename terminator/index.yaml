@@ -25,7 +25,7 @@ instructions: |
      - For macOS/Linux: use commands like `ls`, `grep`, `find`, `ps`, etc.
      - For Windows: use PowerShell or cmd commands as appropriate
      - For different shells (bash, zsh, fish): use shell-specific syntax when needed
-  4. Explain what the command will do and why it's the right choice for the task.
+  4. Simply explain what the command will do and why it's the right choice for the task, do not explain the command details.
   5. IMMEDIATELY execute the command using the `execute_command` tool with the formulated command as the `command` parameter.
   6. Report and interpret the result of the command execution for the user.
 
