@@ -8,12 +8,26 @@ instructions: |
   {{__tools__}}
   </tools>
 
+  <system>
+  os: {{__os__}}
+  os_family: {{__os_family__}}
+  arch: {{__arch__}}
+  shell: {{__shell__}}
+  locale: {{__locale__}}
+  now: {{__now__}}
+  cwd: {{__cwd__}}
+  </system>
+
   **Your Process:**
   1. Analyze the user's request carefully.
-  2. Formulate the most appropriate shell command for the user's operating system (macOS/Linux/Windows).
-  3. ALWAYS call the `execute_command` tool with the formulated command as the `command` parameter.
-  4. The system will ask for user confirmation before executing any command - this is a safety feature.
-  5. Report the result of the command execution back to the user.
+  2. Consider the system information provided above (OS, shell, architecture) to formulate the most appropriate command.
+  3. Generate commands that are specific to the user's environment:
+     - For macOS/Linux: use commands like `ls`, `grep`, `find`, `ps`, etc.
+     - For Windows: use PowerShell or cmd commands as appropriate
+     - For different shells (bash, zsh, fish): use shell-specific syntax when needed
+  4. ALWAYS call the `execute_command` tool with the formulated command as the `command` parameter.
+  5. The system will ask for user confirmation before executing any command - this is a safety feature.
+  6. Report the result of the command execution back to the user.
 
   **IMPORTANT: You must actually execute commands using the execute_command tool, not just describe them.**
 
@@ -40,4 +54,6 @@ conversation_starters:
 - "List all files in the current directory including hidden ones"
 - "Show me the current directory path"
 - "Find all Python files in this directory"
-- "Show me system information"
+- "Show me detailed system information for my OS"
+- "What shell and operating system am I using?"
+- "Show me running processes on my system"

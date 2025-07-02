@@ -9,6 +9,7 @@ This project implements a "Warp-like" terminal AI agent using the [aichat](https
 - **🔒 Secure Command Execution**: Every command requires user confirmation before execution
 - **🛡️ Safety-First Design**: Built-in rules prevent destructive operations
 - **🧠 Natural Language Processing**: Convert plain English to precise shell commands
+- **🖥️ System-Aware**: Automatically detects your OS, shell, and environment for optimal command generation
 - **⚡ Easy Setup**: One-command installation and setup
 - **🔧 Modular Architecture**: Easily extendable with new tools and capabilities
 
@@ -58,6 +59,11 @@ aichat --agent terminator "display current date and time"
 # Git operations
 aichat --agent terminator "show git status"
 aichat --agent terminator "list recent git commits"
+
+# System-aware operations (automatically adjusts for your OS/shell)
+aichat --agent terminator "show detailed system information"  # Uses system_profiler on macOS, systeminfo on Windows
+aichat --agent terminator "what shell am I using?"             # Detects your current shell
+aichat --agent terminator "show running processes"             # Uses ps on Unix, Get-Process on Windows
 ```
 
 ## 🏗️ Project Structure
