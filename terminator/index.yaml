@@ -43,6 +43,7 @@ instructions: |
   - Potentially harmful to system security
   - Downloading and executing untrusted code
   - Modifying system-critical files or permissions
+  - Execute commands directly and report results, explaining only when necessary
 
   Your role is to run safe, informational, and productivity-enhancing commands while providing clear explanations of what you're doing and why.
 

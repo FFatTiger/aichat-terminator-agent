@@ -38,17 +38,21 @@ aichat --list-agents  # Should show 'terminator'
 
 ## Usage
 
-Basic usage:
+### Basic usage:
 ```bash
 aichat --agent terminator "list all files"
 aichat --agent terminator "show git status"
 aichat --agent terminator "check disk usage"
 ```
+### Interactive session:
 
-Interactive session:
-> aichat --agent terminator --session
+Enter REPL mode:
 ```bash
-13:30:57 › aichat -a terminator -s
+aichat --agent terminator --session
+```
+
+Then chat in session:
+```bash
 terminator>temp) create a test.txt file                                                                                                                                                 0
 I will create a file named "test.txt" in the current directory. This file will be empty initially. The command I'll use is `touch test.txt`, which safely creates an empty file if it does not exist, or updates the timestamp if it does.
 
@@ -64,9 +68,6 @@ The command I'll use is `rm test.txt`.
 Executing the command now.
 Call terminator execute_command {"command":"rm test.txt"}
 Execute command: rm test.txt [Y/n] y
-
-terminator>temp) 
-> Save session? No
 ```
 
 ## ⚠️ Security Warning
