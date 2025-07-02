@@ -15,9 +15,20 @@ build_agent() {
     local script_file="tools.sh"
     
     if [[ -f "$script_file" ]]; then
-        # Generate functions.json
+        # Generate functions.json using proper method
         local json_schema_file="functions.json"
-        argc --argc-export "$script_file" | jq '[.]' > "$json_schema_file"
+        local declarations="$(argc --argc-export "$script_file" | \
+            jq '[{
+                "name": .subcommands[0].name,
+                "description": .subcommands[0].describe,
+                "parameters": {
+                    "type": "object",
+                    "properties": (.subcommands[0].flag_options | map(select(.id != "help") | {(.id): {"type": "string", "description": .describe}}) | add),
+                    "required": [.subcommands[0].flag_options[] | select(.required == true and .id != "help") | .id]
+                },
+                "agent": true
+            }]')"
+        echo "$declarations" > "$json_schema_file"
         echo "Generated terminator/$json_schema_file"
         
         # Create bin directory and binary
