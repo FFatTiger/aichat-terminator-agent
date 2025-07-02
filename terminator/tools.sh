@@ -45,8 +45,15 @@ execute_command() {
     
     # Output results to LLM
     if [[ $exit_code -eq 0 ]]; then
-        # Success: show output
-        cat "$temp_out" >> "$LLM_OUTPUT"
+        # Success: show output or confirmation
+        if [[ -s "$temp_out" ]]; then
+            # Command has output
+            cat "$temp_out" >> "$LLM_OUTPUT"
+        else
+            # Command executed successfully but no output
+            echo "Command executed successfully (no output)." >> "$LLM_OUTPUT"
+        fi
+        
         if [[ -s "$temp_err" ]]; then
             echo "" >> "$LLM_OUTPUT"
             echo "Command executed successfully, but had warnings:" >> "$LLM_OUTPUT"
