@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-echo "🤖 Setting up aichat Terminator Agent..."
+echo "🤖 Setting up aichat Terminator Agent (Force Replace Mode)..."
+echo ""
 
 # Check dependencies
 echo "📋 Checking dependencies..."
@@ -20,13 +21,11 @@ if ! ./Argcfile.sh check; then
     exit 1
 fi
 
-# Build the agent
-echo "🔨 Building agent..."
-./Argcfile.sh build
+echo ""
 
-# Link to aichat
-echo "🔗 Linking to aichat..."
-./Argcfile.sh link-to-aichat
+# Force reinstall the agent (clean build + relink)
+echo "🚀 Performing complete reinstallation..."
+./Argcfile.sh reinstall
 
 echo "✅ Setup complete!"
 echo ""
