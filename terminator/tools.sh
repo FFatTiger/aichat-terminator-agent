@@ -72,6 +72,7 @@ execute_command() {
         
         # Check if user rejected the operation
         if [[ "$guard_output" == *"USER_REJECTED:"* ]]; then
+            echo "$guard_output" >> "$LLM_OUTPUT"
             echo "Command execution was cancelled by user." >> "$LLM_OUTPUT"
             return 0
         fi
