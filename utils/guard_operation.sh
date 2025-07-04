@@ -7,8 +7,8 @@ main() {
         confirmation_prompt="${1:-"Are you sure you want to continue?"}"
         read -r -p "$confirmation_prompt [Y/n] " ans
         if [[ "$ans" == "N" || "$ans" == "n" ]]; then
-            echo "error: aborted!" 2>&1
-            exit 1
+            echo "USER_REJECTED: The user has declined to proceed with the operation."
+            return 1
         fi
     fi
 }
