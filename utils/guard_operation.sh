@@ -8,7 +8,6 @@ main() {
         read -r -p "$confirmation_prompt [Y/n] " ans
         if [[ "$ans" == "N" || "$ans" == "n" ]]; then
             echo "USER_REJECTED: The user has declined to proceed with the operation."
-            return 1
         fi
     fi
 }
