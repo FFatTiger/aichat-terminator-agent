@@ -66,15 +66,14 @@ execute_command() {
     if [[ "${LLM_AGENT_VAR_AUTO_APPROVE:-false}" == "true" ]]; then
         echo "Auto-approve enabled, executing command: $argc_command" >> "$LLM_OUTPUT"
     else
-        # Use guard operation for confirmation and capture output
-        local guard_output
-        guard_output=$("$ROOT_DIR/utils/guard_operation.sh" "Execute command: $argc_command")
-        
-        # Check if user rejected the operation
-        if [[ "$guard_output" == *"USER_REJECTED:"* ]]; then
-            echo "$guard_output" >> "$LLM_OUTPUT"
-            echo "Command execution was cancelled by user." >> "$LLM_OUTPUT"
-            return 0
+        # Guard operation with user confirmation
+        if [ -t 1 ]; then
+            read -r -p "Execute command: $argc_command [Y/n] " ans
+            if [[ "$ans" == "N" || "$ans" == "n" ]]; then
+                echo "USER_REJECTED: The user has declined to proceed with the operation." >> "$LLM_OUTPUT"
+                echo "Command execution was cancelled by user." >> "$LLM_OUTPUT"
+                return 0
+            fi
         fi
     fi
     
