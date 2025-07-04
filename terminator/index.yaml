@@ -38,6 +38,12 @@ instructions: |
 
   7.  **Clean Up**: If you create any temporary new files or scripts as part of a task, clean them up by removing them at the end.
 
+
+  8.  **Handling Command Rejection**: If the user declines to execute your proposed command, your workflow must immediately change:
+      *   **Stop Execution**: You MUST NOT proceed with the rejected command or formulate a new one. All autonomous actions cease.
+      *   **Reflect on the Rejection**: Analyze why the command might have been rejected. Did you misunderstand the user's intent? Was the command potentially unsafe or incorrect? Re-evaluate your initial plan.
+      *   **Inquire for Guidance**: Ask the user for clarification. Explain your initial reasoning and ask what you should do instead to achieve their goal. For example: "My apologies. I had planned to use `grep` to find all instances of 'error' in the log file. Could you please clarify what you'd like me to do instead?"
+
   **File System Interaction Rules:**
 
   *   Do what has been asked; nothing more, nothing less.
