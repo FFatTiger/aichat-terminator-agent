@@ -6,8 +6,12 @@ An AI agent that translates natural language into shell commands with built-in s
 
 - Natural language to shell command translation
 - Human-in-the-loop safety: all commands require approval
+- **Real-time command output**: See command results as they happen
+- **Command timeout protection**: Automatically terminates long-running commands
+- **Smart output limiting**: Prevents screen flooding with configurable line limits
 - Cross-platform support (macOS, Linux, Windows)
 - Session mode for extended workflows
+- Configurable timeout, output display modes, and line limits
 
 ## Installation
 
@@ -45,6 +49,46 @@ aichat --agent terminator "show git status"
 aichat --agent terminator "check disk usage"
 ```
 
+### New Features Examples:
+
+**Real-time output** (commands show output immediately):
+```bash
+aichat --agent terminator "ping google.com for 10 seconds"
+aichat --agent terminator "download a file with wget"
+```
+
+**Timeout protection** (commands automatically timeout after 5 minutes by default):
+```bash
+# This will timeout if it runs longer than configured timeout
+aichat --agent terminator "find all files larger than 1GB"
+```
+
+**Output limiting** (prevents screen flooding):
+```bash
+# Large output will be limited to configured max_output_lines (default: 50)
+aichat --agent terminator "find all log files"
+aichat --agent terminator "list all processes"
+
+# In buffered mode, shows first 25 + last 25 lines with summary
+# In real-time mode, truncates output and shows warning
+```
+
+**Custom configuration**:
+Edit `terminator/config.yaml` for custom settings:
+```yaml
+# Example: 1-minute timeout, 100 lines output, buffered mode
+variables:
+  timeout: 60
+  max_output_lines: 100
+  show_real_time_output: false
+```
+
+Then rebuild and test:
+```bash
+./setup.sh  # Rebuild agent
+aichat --agent terminator "your command with large output"
+```
+
 ### Interactive session:
 
 Enter REPL mode:
@@ -71,17 +115,42 @@ Call terminator execute_command {"command":"rm test.txt"}
 Execute command: rm test.txt [Y/n] y
 ```
 
-### ⚠️ Auto-approve mode (EXTREMELY DANGEROUS):
-To skip confirmation prompts, edit `terminator/config.yaml`:
+### Configuration Options
+
+Edit `terminator/config.yaml` to customize behavior:
+
 ```yaml
 variables: 
-  auto_approve: true    # 🚨 DANGER: Completely bypasses ALL safety checks
+  auto_approve: false                     # Set to true to skip confirmation prompts (⚠️ use with caution)
+  timeout: 300                           # Command timeout in seconds (default: 5 minutes)
+  show_real_time_output: true            # Show command output in real-time
+  max_output_lines: 50                   # Maximum lines of output to display (default: 50)
 ```
 
-After editing, rebuild the agent:
+**Configuration explanations:**
+
+- **`timeout`**: Maximum time (in seconds) a command can run before being terminated
+  - Default: 300 seconds (5 minutes)
+  - Set to 0 to disable timeout (not recommended)
+  - Commands that exceed this time will be automatically killed
+
+- **`show_real_time_output`**: Control how command output is displayed
+  - `true`: Show output immediately as the command runs (recommended)
+  - `false`: Buffer all output and show it only after command completion
+
+- **`max_output_lines`**: Limit the number of output lines displayed
+  - Default: 50 lines to keep output manageable
+  - When exceeded in buffered mode: shows first N/2 and last N/2 lines with summary
+  - When exceeded in real-time mode: truncates output and shows warning
+  - Set to a higher value for commands with more expected output
+
+After editing configuration, rebuild the agent:
 ```bash
 ./setup.sh
 ```
+
+### ⚠️ Auto-approve mode (EXTREMELY DANGEROUS):
+Setting `auto_approve: true` completely bypasses ALL safety checks
 
 🚨 **CRITICAL WARNING**: Auto-approve mode is EXTREMELY DANGEROUS and can cause IRREVERSIBLE DAMAGE to your system:
 
